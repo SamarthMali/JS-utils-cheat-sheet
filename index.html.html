@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>JavaScript Utility Functions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 32px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #94a3b8;
+      margin-bottom: 32px;
+    }
+
+    section {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+      color: #38bdf8;
+    }
+
+    .use {
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      margin-bottom: 12px;
+    }
+
+    pre {
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+    }
+
+    code {
+      color: #e5e7eb;
+    }
+
+    footer {
+      margin-top: 48px;
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>JavaScript Utility Functions</h1>
+  <p>Copy-paste friendly helpers I reuse in React / Next.js projects.</p>
+
+  <!-- 1 -->
+  <section>
+    <h2>1. Debounce Function</h2>
+    <div class="use">Use case: Prevent over-triggering (search, scroll, resize)</div>
+    <pre><code>
+export function debounce(func, delay = 300) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), delay);
+  };
+}
+
+// Usage
+const handleChange = debounce((val) => searchUsers(val), 400);
+    </code></pre>
+  </section>
+
+  <!-- 2 -->
+  <section>
+    <h2>2. Format Date</h2>
+    <div class="use">Use case: Dashboards, receipts, logs</div>
+    <pre><code>
+export function formatDate(dateStr, locale = "en-US") {
+  return new Date(dateStr).toLocaleDateString(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// formatDate("2025-04-22") → Apr 22, 2025
+    </code></pre>
+  </section>
+
+  <!-- 3 -->
+  <section>
+    <h2>3. classNames Utility</h2>
+    <div class="use">Use case: Conditional Tailwind / CSS classes</div>
+    <pre><code>
+export function classNames(...args) {
+  return args.filter(Boolean).join(" ");
+}
+
+// &lt;button className={classNames("btn", isActive && "btn-primary")} /&gt;
+    </code></pre>
+  </section>
+
+  <!-- 4 -->
+  <section>
+    <h2>4. Safe JSON Parse</h2>
+    <div class="use">Use case: localStorage or unreliable APIs</div>
+    <pre><code>
+export function safeJsonParse(str, fallback = {}) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return fallback;
+  }
+}
+
+// const user = safeJsonParse(localStorage.getItem("user"));
+    </code></pre>
+  </section>
+
+  <!-- 5 -->
+  <section>
+    <h2>5. isEmpty Object</h2>
+    <div class="use">Use case: Form validation</div>
+    <pre><code>
+export function isEmpty(obj) {
+  return obj &&
+    Object.keys(obj).length === 0 &&
+    obj.constructor === Object;
+}
+
+// if (isEmpty(errors)) submitForm();
+    </code></pre>
+  </section>
+
+  <!-- 6 -->
+  <section>
+    <h2>6. Copy to Clipboard</h2>
+    <div class="use">Use case: Copy links, tokens, IDs</div>
+    <pre><code>
+export async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    console.error("Copy failed:", err);
+    return false;
+  }
+}
+    </code></pre>
+  </section>
+
+  <!-- 7 -->
+  <section>
+    <h2>7. Capitalize First Letter</h2>
+    <div class="use">Use case: UI polish</div>
+    <pre><code>
+export function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// capitalize("pending") → "Pending"
+    </code></pre>
+  </section>
+
+  <!-- 8 -->
+  <section>
+    <h2>8. Sleep Helper</h2>
+    <div class="use">Use case: Loaders, animations, throttling</div>
+    <pre><code>
+export function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// await sleep(1000);
+    </code></pre>
+  </section>
+
+  <!-- 9 -->
+  <section>
+    <h2>9. Remove Duplicates</h2>
+    <div class="use">Use case: Tags, filters</div>
+    <pre><code>
+export function uniqueArray(arr) {
+  return [...new Set(arr)];
+}
+
+// uniqueArray([...userTags, ...defaultTags]);
+    </code></pre>
+  </section>
+
+  <!-- 10 -->
+  <section>
+    <h2>10. Download File</h2>
+    <div class="use">Use case: Export PDFs, reports</div>
+    <pre><code>
+export function downloadFile(url, filename) {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// downloadFile("/resume.pdf", "MyResume.pdf");
+    </code></pre>
+  </section>
+
+  <footer>
+    Built as a personal JavaScript utils vault 🚀
+  </footer>
+
+</body>
+</html>
